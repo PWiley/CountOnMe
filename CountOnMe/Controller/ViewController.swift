@@ -27,15 +27,20 @@ class ViewController: UIViewController {
   
   // View actions
   @IBAction func tappedNumberButton(_ sender: UIButton) {
-    guard let numberText = sender.title(for: .normal) else {
-      return
-    }
+//    guard let numberText = sender.title(for: .normal) else {
+//      return
+//    }
+//
+//    if model.haveEnoughElement() {
+//      textView.text = ""
+//    }
+//
+//    textView.text.append(numberText)
+    //model.addNumber(sender)
     
-    if model.expressionHaveResult {
-      textView.text = ""
-    }
-    
-    textView.text.append(numberText)
+    print(sender.tag)
+    model.addNumber(String(sender.tag))
+    print(model.elements)
   }
   
   @IBAction func tappedResetButton(_ sender: UIButton) {
@@ -114,7 +119,7 @@ class ViewController: UIViewController {
 //      self.present(alertVC, animated: true, completion: nil)
 //    }
     do {
-      try model.isFloat()
+      try model.commaFloat(",")
     }catch{
       Alert.showAlert(title: "Zéro", message: "Un opérateur est déjà mis !", vc: self)
     }
@@ -127,7 +132,7 @@ class ViewController: UIViewController {
 //      return self.present(alertVC, animated: true, completion: nil)
 //    }
     do {
-      try model.isCorrect()
+      try model.expressionIsCorrect()
     }catch{
       Alert.showAlert(title: "Zéro", message: "Un opérateur est déjà mis !", vc: self)
     }
@@ -138,7 +143,7 @@ class ViewController: UIViewController {
 //      return self.present(alertVC, animated: true, completion: nil)
 //    }
     do {
-      try model.haveEnoughElement()
+      try model.expressionLenghtCorrect()
     }catch{
       Alert.showAlert(title: "Zéro", message: "Un opérateur est déjà mis !", vc: self)
     }
@@ -215,6 +220,10 @@ class ViewController: UIViewController {
     }
     operationsToReduce[0] = operationsToReduce[0].replacingOccurrences(of: ".", with: ",")
     textView.text.append(" = \(operationsToReduce.first!)")
+  }
+  func displayEquation(value: String) {
+    textView.text = ""
+    textView.text += model.equation
   }
   
   

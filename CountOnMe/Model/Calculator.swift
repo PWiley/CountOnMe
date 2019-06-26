@@ -10,11 +10,13 @@ import Foundation
 
 class Calculator {
   
-  var text = ""
+  
+  
+  var equation = ""
   
   var elements: [String] {
     //print(text.split(separator: " ").map { "\($0)" })
-    return text.split(separator: " ").map { "\($0)" }
+    return equation.split(separator: " ").map { "\($0)" }
   }
 //  var expressionIsCorrect: Bool {
 //    return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "÷"
@@ -36,27 +38,51 @@ class Calculator {
 //  var expressionHaveResult: Bool {
 //    return text.firstIndex(of: "=") != nil
 //  }
+  func addNumber(_ number: String) {
+    equation += number
+    
+    
+  }
+  
   func addOperator(_ operatorSign: String) throws {
     guard canAddOperator() else {
       throw Error.cantAddOperator
     }
-    text += " \(operatorSign) "
+    equation += " \(operatorSign) "
   }
   
   func divideOperator(_ operatorSign: String) throws {
     guard canDivideOperator() else {
       throw Error.cantDivideOperator
     }
-    text += " \(operatorSign) "
+    equation += " \(operatorSign) "
   }
   
   func haveResult(_ operatorSign: String) throws {
     guard canHaveResult() else {
       throw Error.expressionIncorrect
     }
-    text += " \(operatorSign) "
+    equation += " \(operatorSign) "
   }
   
+  func commaFloat(_ operatorSign: String) throws {
+    guard isFloat() else {
+      throw Error.expressionIncorrect
+    }
+    equation += " \(operatorSign) "
+  }
+  func expressionIsCorrect() throws {
+    guard isCorrect() else {
+      throw Error.expressionIncorrect
+    }
+    
+  }
+  func expressionLenghtCorrect() throws {
+    guard haveEnoughElement() else {
+      throw Error.expressionIncorrect
+    }
+    
+  }
   func canAddOperator() -> Bool {
     guard elements.last != "+" && elements.last != "-" else {
       return false
@@ -76,7 +102,7 @@ class Calculator {
     return true
   }
   func canHaveResult() -> Bool {
-    guard text.firstIndex(of: "=") != nil else {
+    guard equation.firstIndex(of: "=") != nil else {
       return false
     }
     return true
