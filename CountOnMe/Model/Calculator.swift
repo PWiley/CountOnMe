@@ -18,26 +18,7 @@ class Calculator {
     //print(text.split(separator: " ").map { "\($0)" })
     return equation.split(separator: " ").map { "\($0)" }
   }
-//  var expressionIsCorrect: Bool {
-//    return elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "÷"
-//  }
-  
-//  var expressionHaveEnoughElement: Bool {
-//    return elements.count >= 3
-//  }
-  
-//  var canAddOperator: Bool {
-//    return elements.last != "+" && elements.last != "-"
-//  }
-//  var canDivideOperator: Bool {
-//    return elements.last != "x" && elements.last != "÷"
-//  }
-//  var expressionIsFloat: Bool {
-//    return elements.last != ","
-//  }
-//  var expressionHaveResult: Bool {
-//    return text.firstIndex(of: "=") != nil
-//  }
+
   func addNumber(_ number: String) {
     equation += number
     
