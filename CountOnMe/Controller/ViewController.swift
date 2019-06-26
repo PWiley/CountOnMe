@@ -27,17 +27,7 @@ class ViewController: UIViewController {
   
   // View actions
   @IBAction func tappedNumberButton(_ sender: UIButton) {
-//    guard let numberText = sender.title(for: .normal) else {
-//      return
-//    }
-//
-//    if model.haveEnoughElement() {
-//      textView.text = ""
-//    }
-//
-//    textView.text.append(numberText)
-    //model.addNumber(sender)
-    
+
     print(sender.tag)
     model.addNumber(String(sender.tag))
     print(model.elements)
@@ -50,14 +40,7 @@ class ViewController: UIViewController {
   
  
   @IBAction func tappedAdditionButton(_ sender: UIButton) {
-//    if model.canAddOperator {
-//      textView.text.append(" + ")
-//    } else {
-////      let alertVC = UIAlertController(title: "Zéro!", message: "Un opérateur est déja mis !", preferredStyle: .alert)
-////      alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-////      self.present(alertVC, animated: true, completion: nil)
-//      Alert.showAlert(title: "Zéro", message: "Un opérateur est déja mis !", vc: self)
-//    }
+
     do {
       try model.addOperator("+")
     } catch {
@@ -66,13 +49,7 @@ class ViewController: UIViewController {
   }
   
   @IBAction func tappedSubstractionButton(_ sender: UIButton) {
-//    if model.canAddOperator {
-//      textView.text.append(" - ")
-//    }else {
-//      let alertVC = UIAlertController(title: "Zéro!", message: "Un opérateur est déja mis !", preferredStyle: .alert)
-//      alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-//      self.present(alertVC, animated: true, completion: nil)
-//    }
+
     do {
       try model.addOperator("-")
     }catch{
@@ -81,13 +58,7 @@ class ViewController: UIViewController {
   }
   
   @IBAction func tappedMultiplicationButton(_ sender: UIButton) {
-//    if model.canDivideOperator {
-//      textView.text.append(" x ")
-//    }else {
-//      let alertVC = UIAlertController(title: "Zéro!", message: "Un opérateur est déja mis !", preferredStyle: .alert)
-//      alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-//      self.present(alertVC, animated: true, completion: nil)
-//    }
+
     do {
       try model.divideOperator("x")
     }catch{
@@ -96,13 +67,7 @@ class ViewController: UIViewController {
   }
   
   @IBAction func tappedDivisionButton(_ sender: UIButton) {
-//    if model.canDivideOperator {
-//      textView.text.append(" ÷ ")
-//    } else {
-//      let alertVC = UIAlertController(title: "Zéro!", message: "Un opérateur est déja mis !", preferredStyle: .alert)
-//      alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-//      self.present(alertVC, animated: true, completion: nil)
-//    }
+
     do {
       try model.divideOperator("÷")
     }catch{
@@ -111,13 +76,7 @@ class ViewController: UIViewController {
   }
   
   @IBAction func tappedComma(_ sender: UIButton) {
-//   if model.expressionIsFloat {
-//      textView.text.append(",")
-//    } else {
-//      let alertVC = UIAlertController(title: "Zéro!", message: "Un opérateur est déja mis !", preferredStyle: .alert)
-//      alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-//      self.present(alertVC, animated: true, completion: nil)
-//    }
+
     do {
       try model.commaFloat(",")
     }catch{
@@ -126,22 +85,13 @@ class ViewController: UIViewController {
     
   }
   @IBAction func tappedEqualButton(_ sender: UIButton) {
-//    guard model.expressionIsCorrect else {
-//      let alertVC = UIAlertController(title: "Zéro!", message: "Entrez une expression correcte !", preferredStyle: .alert)
-//      alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-//      return self.present(alertVC, animated: true, completion: nil)
-//    }
+
     do {
       try model.expressionIsCorrect()
     }catch{
       Alert.showAlert(title: "Zéro", message: "Un opérateur est déjà mis !", vc: self)
     }
-    
-//    guard model.expressionHaveEnoughElement else {
-//      let alertVC = UIAlertController(title: "Zéro!", message: "Démarrez un nouveau calcul !", preferredStyle: .alert)
-//      alertVC.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-//      return self.present(alertVC, animated: true, completion: nil)
-//    }
+
     do {
       try model.expressionLenghtCorrect()
     }catch{
