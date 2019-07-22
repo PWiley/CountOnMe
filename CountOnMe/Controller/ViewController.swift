@@ -22,166 +22,101 @@ class ViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view.
+    
   }
   
   
   // View actions
   @IBAction func tappedNumberButton(_ sender: UIButton) {
 
-    print(sender.tag)
-    model.addNumber(String(sender.tag))
-    print(model.elements)
-  }
-  
-  @IBAction func tappedResetButton(_ sender: UIButton) {
-    print("reset")
-    textView.text = ""
-  }
-  
- 
-  @IBAction func tappedAdditionButton(_ sender: UIButton) {
-
-    do {
-      try model.addOperator("+")
-    } catch {
-      Alert.showAlert(title: "Zéro", message: "Un opérateur est déja mis !", vc: self)
+    if let numberValue = sender.title(for: .normal) {
+      print(numberValue)
+    model.addNumber(numberValue)
     }
+    displayEquation()
   }
-  
+ 
+  @IBAction func tappedResetButton(_ sender: UIButton) {
+    textView.text = model.resetEquation()
+  }
+ 
+ @IBAction func tappedAdditionButton(_ sender: UIButton) {
+    if let operatorSign = sender.title(for: .normal) {
+      print(operatorSign)
+    testAddOperator(operatorSign)
+   }
+    displayEquation()
+  }
   @IBAction func tappedSubstractionButton(_ sender: UIButton) {
 
-    do {
-      try model.addOperator("-")
-    }catch{
-      Alert.showAlert(title: "Zéro", message: "Un opérateur est déjà mis !", vc: self)
+    if let operatorSign = sender.title(for: .normal) {
+      print(operatorSign)
+      
+      testAddOperator(operatorSign)
+      print(model.elements.count-1)
+      
     }
+    displayEquation()
   }
   
   @IBAction func tappedMultiplicationButton(_ sender: UIButton) {
 
-    do {
-      try model.divideOperator("x")
-    }catch{
-      Alert.showAlert(title: "Zéro", message: "Un opérateur est déjà mis !", vc: self)
+    if let operatorSign = sender.title(for: .normal) {
+      print(operatorSign)
+      
+      testAddOperator(operatorSign)
+      
     }
+    displayEquation()
   }
   
   @IBAction func tappedDivisionButton(_ sender: UIButton) {
 
-    do {
-      try model.divideOperator("÷")
-    }catch{
-      Alert.showAlert(title: "Zéro", message: "Un opérateur est déjà mis !", vc: self)
+    if let operatorSign = sender.title(for: .normal) {
+      print(operatorSign)
+      testAddOperator(operatorSign)
     }
+    displayEquation()
   }
   
   @IBAction func tappedComma(_ sender: UIButton) {
-
+    
     do {
-      try model.commaFloat(",")
-    }catch{
-      Alert.showAlert(title: "Zéro", message: "Un opérateur est déjà mis !", vc: self)
+      try model.addComma(",")
+    } catch {
+      Alert.showAlert(title: "Virgule", message: "Impossible d'ajouter la virgule !", vc: self)
     }
+    displayEquation()
     
   }
   @IBAction func tappedEqualButton(_ sender: UIButton) {
 
     do {
-      try model.expressionIsCorrect()
-    }catch{
-      Alert.showAlert(title: "Zéro", message: "Un opérateur est déjà mis !", vc: self)
-    }
-
-    do {
       try model.expressionLenghtCorrect()
-    }catch{
-      Alert.showAlert(title: "Zéro", message: "Un opérateur est déjà mis !", vc: self)
+    } catch {
+      Alert.showAlert(title: "Equation", message: "L´équation est incomplète !", vc: self)
     }
+    model.calculate()
+    displayEquation()
+ }
+  
+  fileprivate func testAddOperator(_ operatorSign: String) {
     
-    // Create local copy of operations
-    var operationsToReduce = model.elements
-    var operationTemp = [String]()
-    
-   // while operationsToReduce.count > 1 {
-      for index in 0...operationsToReduce.count - 1 {
-        
-      
-      print("operationsToReduce: \(operationsToReduce)")
-      if operationsToReduce[index].contains(",") {
-        operationsToReduce[index] = operationsToReduce[index].replacingOccurrences(of: ",", with: ".")
-        
+    do {
+      try model.checkLastOperation()
+      do {
+        try model.addOperator("\(operatorSign)")
+      } catch {
+        Alert.showAlert(title: "Zéro", message: "Un opérateur est déja mis !", vc: self)
       }
-      
+    } catch {
+      Alert.showAlert(title: "Zéro", message: "Une division par zéro est impossible", vc: self)
     }
-    operationTemp += operationsToReduce
-    operationsToReduce = operationTemp
-    operationTemp.removeAll()
-    print(operationsToReduce)
-    
-    while operationsToReduce.count > 1 {
-      
-      print("operationsToReduce: \(operationsToReduce)")
-      if operationsToReduce[1] == "÷" || operationsToReduce[1] == "x" {
-        
-        let left = Float(operationsToReduce[0])!
-        let operand = operationsToReduce[1]
-        let right = Float(operationsToReduce[2])!
-        
-        let result: Float
-        switch operand {
-        case "÷": result = left / right
-        case "x": result = left * right
-        default: fatalError("Unknown operator ! \(operand)")
-          
-        }
-        operationsToReduce = Array(operationsToReduce.dropFirst(3))
-        operationsToReduce.insert("\(result)", at: 0)
-      } else {
-        operationTemp.append(operationsToReduce[0])
-        operationTemp.append(operationsToReduce[1])
-        operationsToReduce = Array(operationsToReduce.dropFirst(2))
-      }
-    }
-    operationTemp += operationsToReduce
-    operationsToReduce = operationTemp
-    operationTemp.removeAll()
-    print(operationsToReduce)
-    
-    // Iterate over operations while an operand still here
-    
-    print(operationsToReduce.count)
-    while operationsToReduce.count > 1 {
-      
-      let left = Float(operationsToReduce[0])!
-      let operand = operationsToReduce[1]
-      
-      let right = Float(operationsToReduce[2])!
-      
-      let result: Float
-      switch operand {
-      case "+": result = left + right
-      case "-": result = left - right
-        
-      default: fatalError("Unknown operator !")
-      }
-      
-      operationsToReduce = Array(operationsToReduce.dropFirst(3))
-      operationsToReduce.insert("\(result.clean)", at: 0)
-    }
-    operationsToReduce[0] = operationsToReduce[0].replacingOccurrences(of: ".", with: ",")
-    textView.text.append(" = \(operationsToReduce.first!)")
-  }
-  func displayEquation(value: String) {
-    textView.text = ""
-    textView.text += model.equation
   }
   
-  
+  func displayEquation() {
+    textView.text = model.equation
+  }
 }
 
-extension Float {
-  var clean: String {
-    return self.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", self) : String(self)
-  }
-}
 
