@@ -43,7 +43,7 @@ class ViewController: UIViewController {
  @IBAction func tappedAdditionButton(_ sender: UIButton) {
     if let operatorSign = sender.title(for: .normal) {
       print(operatorSign)
-    testAddOperator(operatorSign)
+    isPossibleAddOperator(operatorSign)
    }
     displayEquation()
   }
@@ -52,7 +52,7 @@ class ViewController: UIViewController {
     if let operatorSign = sender.title(for: .normal) {
       print(operatorSign)
       
-      testAddOperator(operatorSign)
+      isPossibleAddOperator(operatorSign)
       print(model.elements.count-1)
       
     }
@@ -64,7 +64,7 @@ class ViewController: UIViewController {
     if let operatorSign = sender.title(for: .normal) {
       print(operatorSign)
       
-      testAddOperator(operatorSign)
+      isPossibleAddOperator(operatorSign)
       
     }
     displayEquation()
@@ -74,7 +74,7 @@ class ViewController: UIViewController {
 
     if let operatorSign = sender.title(for: .normal) {
       print(operatorSign)
-      testAddOperator(operatorSign)
+      isPossibleAddOperator(operatorSign)
     }
     displayEquation()
   }
@@ -100,7 +100,7 @@ class ViewController: UIViewController {
     displayEquation()
  }
   
-  fileprivate func testAddOperator(_ operatorSign: String) {
+  fileprivate func isPossibleAddOperator(_ operatorSign: String) {
     
     do {
       try model.checkLastOperation()
