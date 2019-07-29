@@ -37,7 +37,8 @@ class ViewController: UIViewController {
   }
  
   @IBAction func tappedResetButton(_ sender: UIButton) {
-    textView.text = model.resetEquation()
+    model.resetEquation()
+    textView.text = ""
   }
  
  @IBAction func tappedAdditionButton(_ sender: UIButton) {
@@ -115,7 +116,7 @@ class ViewController: UIViewController {
   }
   
   func displayEquation() {
-    textView.text = model.equation
+    textView.text = model.equationToDisplay
   }
 }
 
