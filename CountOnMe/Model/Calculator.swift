@@ -13,10 +13,11 @@ class Calculator {
     private var equation = ""
     private var operationsToReduce = [String]()
     var hasResult = false
-    var wasNoResult: Bool = true
-    
     var equationToDisplay: String {
         return equation
+    }
+    var operationsToReduceTest: [String] {
+        return operationsToReduce
     }
     var elements: [String] {
         return equation.split(separator: " ").map { "\($0)" }
@@ -26,23 +27,18 @@ class Calculator {
     
     func resetEquation() {
         equation = ""
-//        return equation
     }
     
-    func replaceComma() {
-        
+    private func replaceComma() {
+        operationsToReduce = elements
         for index in 0...operationsToReduce.count - 1 {
-            print("operationsToReduce count: \(operationsToReduce.count)")
-            print("index \(index)")
             if operationsToReduce[index].contains(",") {
                 operationsToReduce[index] = operationsToReduce[index].replacingOccurrences(of: ",", with: ".")
             }
-            
-            print(operationsToReduce)
         }
     }
     
-    func reduceDivideMultiply() {
+    private func reduceDivideMultiply() throws {
         
         // Tant que la liste des operations contient une division ou une multiplication
         while operationsToReduce.firstIndex(of: "÷") != nil || operationsToReduce.firstIndex(of: "x") != nil {
@@ -59,7 +55,7 @@ class Calculator {
             switch operand {
             case "÷": result = left / right
             case "x": result = left * right
-            default: fatalError("Unknown operator ! \(operand)")
+            default: throw Error.noCorrectOperator
             }
            // Remplace le chiffre avant l'operateur par le resultat et supprime l'operateur et le chiffre apres
             operationsToReduce[indexOperand-1] = "\(result)"
@@ -69,10 +65,9 @@ class Calculator {
         // Fin
     }
     
-    func reduceAddSubstract() {
+   private func reduceAddSubstract() throws {
         // Iterate over operations while an operand still here
-        
-        //print(operationsToReduce.count)
+    
         while operationsToReduce.count > 1 {
             
             let left = Float(operationsToReduce[0])!
@@ -82,26 +77,27 @@ class Calculator {
             switch operand {
             case "+": result = left + right
             case "-": result = left - right
-            default: fatalError("Unknown operator !")
+            default: throw Error.noCorrectOperator
             }
             operationsToReduce = Array(operationsToReduce.dropFirst(3))
             operationsToReduce.insert("\(result.clean)", at: 0)
-            print(operationsToReduce)
+            //print(operationsToReduce)
         }
     }
     
     func calculate() {
         // Create local copy of operations
         operationsToReduce = elements
-        
         replaceComma()
-        reduceDivideMultiply()
-        reduceAddSubstract()
-        print("Resultat \(operationsToReduce)")
+        
+        do { try reduceDivideMultiply() } catch{ print("Wrong operator")}
+        do { try reduceAddSubstract() } catch{ print("Wrong operator")}
+       
         operationsToReduce[0] = operationsToReduce[0].replacingOccurrences(of: ".", with: ",")
         
         equation = operationsToReduce.first!.trimmingOperations()
         hasResult = true
+        print("calculTE hasresult true")
     }
     
     // MARK: Functions testing if no errors.
@@ -128,8 +124,8 @@ class Calculator {
     }
     
     func divideIsPossible() -> Bool {
-        
-        if elements[elements.count-1] == "0" && elements[elements.count - 2] == "÷" {
+
+        if elements[elements.count - 1] == "0" && elements[elements.count - 2] == "÷" {
             return false
         }
         return true
@@ -141,6 +137,7 @@ class Calculator {
         if hasResult {
             equation = ""
             hasResult = false
+            print("addNumber haseresult false")
         }
         equation += number
         
@@ -149,7 +146,8 @@ class Calculator {
     func checkLastOperation() throws {
         if !elements.isEmpty {
             guard divideIsPossible() else {
-                equation = ""
+                hasResult = true
+                print("checkLastOperation haseresult false")
                 throw Error.divisionByZero
             }
         }
@@ -159,6 +157,7 @@ class Calculator {
         if hasResult {
             equation = ""
             hasResult = false
+            print("addOperator haseresult false")
         }
         
         guard canAddOperator() else {
@@ -177,8 +176,9 @@ class Calculator {
         guard canAddComma() else {
             throw Error.cantAddComma
         }
-        
+        if elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "÷" {
         equation += "\(operatorSign)"
+        }
     }
     
     func expressionLenghtCorrect() throws {
@@ -191,6 +191,7 @@ class Calculator {
 
 enum Error: Swift.Error {
     
+    case noCorrectOperator
     case cantAddComma
     case divisionByZero
     case cantAddOperator
