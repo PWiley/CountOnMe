@@ -16,12 +16,13 @@ class ViewController: UIViewController {
     let model = Calculator()
     
    // View Life cycles
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        
     }
+    
     // View actions
+    
     @IBAction func tappedNumberButton(_ sender: UIButton) {
         
         if let numberValue = sender.title(for: .normal) {
@@ -30,13 +31,12 @@ class ViewController: UIViewController {
         }
         displayEquation()
     }
-    
     @IBAction func tappedResetButton(_ sender: UIButton) {
         model.resetEquation()
         textView.text = ""
     }
-    
-    @IBAction func tappedAdditionButton(_ sender: UIButton) {
+     @IBAction func tappedAdditionButton(_ sender: UIButton) {
+        
         if let operatorSign = sender.title(for: .normal) {
             isPossibleAddOperator(operatorSign)
         }
@@ -49,7 +49,6 @@ class ViewController: UIViewController {
         }
         displayEquation()
     }
-    
     @IBAction func tappedMultiplicationButton(_ sender: UIButton) {
         
         if let operatorSign = sender.title(for: .normal) {
@@ -57,7 +56,6 @@ class ViewController: UIViewController {
         }
         displayEquation()
     }
-    
     @IBAction func tappedDivisionButton(_ sender: UIButton) {
         
         if let operatorSign = sender.title(for: .normal) {
@@ -65,7 +63,6 @@ class ViewController: UIViewController {
         }
         displayEquation()
     }
-    
     @IBAction func tappedComma(_ sender: UIButton) {
         
         do {
@@ -84,7 +81,7 @@ class ViewController: UIViewController {
                 try model.checkLastOperation()
                 
             } catch {
-                Alert.showAlert(title: "Zéro", message: "Une division par zéro est impossible", vc: self)
+                Alert.showAlert(title: "Division par zéro", message: "Une division par zéro est impossible", vc: self)
             }
         } catch {
             Alert.showAlert(title: "Equation", message: "L´équation est incomplète !", vc: self)
@@ -100,10 +97,10 @@ class ViewController: UIViewController {
             do {
                 try model.addOperator("\(operatorSign)")
             } catch {
-                Alert.showAlert(title: "Zéro", message: "Un opérateur est déja mis !", vc: self)
+                Alert.showAlert(title: "Opérateur", message: "Un opérateur est déja mis !", vc: self)
             }
         } catch {
-            Alert.showAlert(title: "Zéro", message: "Une division par zéro est impossible", vc: self)
+            Alert.showAlert(title: "Division par zéro", message: "Une division par zéro est impossible", vc: self)
         }
     }
     

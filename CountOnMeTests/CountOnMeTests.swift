@@ -11,13 +11,10 @@ import XCTest
 
 class CountOnMeTests: XCTestCase {
     
-    //var calculator: Calculator!
-    
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         
     }
-    
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
@@ -29,9 +26,9 @@ class CountOnMeTests: XCTestCase {
         calculator.addNumber("4")
         calculator.resetEquation()
         XCTAssert(calculator.equationToDisplay == "")
-   }
-   func testCalculate() {
-    
+    }
+    func testCalculate() {
+        
         let calculator = Calculator()
         calculator.resetEquation()
         calculator.addNumber("1,5")
@@ -44,10 +41,10 @@ class CountOnMeTests: XCTestCase {
         calculator.calculate()
         XCTAssertEqual(calculator.operationsToReduceTest, ["-2"])
     }
-   func testCalculateWhenReplaceComma() {
-    
+    func testCalculateWhenReplaceComma() {
+        
         let calculator = Calculator()
-       calculator.resetEquation()
+        calculator.resetEquation()
         calculator.addNumber("1,5")
         XCTAssertNoThrow(try calculator.addOperator("+"))
         calculator.addNumber("1,5")
@@ -57,7 +54,7 @@ class CountOnMeTests: XCTestCase {
         calculator.addNumber("3")
         calculator.calculate()
         XCTAssert(calculator.operationsToReduceTest == ["0"])
-     }
+    }
     func testCalculateWhenDivideMultiply() {
         
         let calculator = Calculator()
@@ -96,8 +93,8 @@ class CountOnMeTests: XCTestCase {
         calculator.addNumber("5")
         XCTAssert(calculator.equationToDisplay == "5")
     }
-   func testAddNumberwhenElementsIsEmpty() {
-    
+    func testAddNumberwhenElementsIsEmpty() {
+        
         let calculator = Calculator()
         calculator.resetEquation()
         calculator.hasResult = true
@@ -158,7 +155,7 @@ class CountOnMeTests: XCTestCase {
         calculator.resetEquation()
         XCTAssertNoThrow(try calculator.addOperator("x"))
         XCTAssert(calculator.elements == [])
-   }
+    }
     func testAddOperatorWhenElementsIsNotEmpty() {
         
         let calculator = Calculator()
@@ -178,7 +175,7 @@ class CountOnMeTests: XCTestCase {
         XCTAssertThrowsError(try calculator.addOperator("-"))
         XCTAssertThrowsError(try calculator.addOperator("x"))
         XCTAssertThrowsError(try calculator.addOperator("÷"))
-   }
+    }
     func testAddOperatorWhenAnOperationWasDoneWhenCant() {
         
         let  calculator = Calculator()
