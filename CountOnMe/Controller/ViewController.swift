@@ -105,7 +105,7 @@ class ViewController: UIViewController {
     }
     
     func displayEquation() {
-        textView.text = model.equationToDisplay
+        textView.text = model.equationToDisplay // display equation
     }
 }
 
