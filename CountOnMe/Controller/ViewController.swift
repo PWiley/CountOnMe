@@ -74,7 +74,7 @@ class ViewController: UIViewController {
         
     }
     @IBAction func tappedEqualButton(_ sender: UIButton) {
-        
+      
         do {
             try model.expressionLenghtCorrect()
             do {
@@ -83,10 +83,10 @@ class ViewController: UIViewController {
             } catch {
                 Alert.showAlert(title: "Division par zéro", message: "Une division par zéro est impossible", vc: self)
             }
+            try model.calculate()
         } catch {
             Alert.showAlert(title: "Equation", message: "L´équation est incomplète !", vc: self)
         }
-        model.calculate()
         displayEquation()
     }
     

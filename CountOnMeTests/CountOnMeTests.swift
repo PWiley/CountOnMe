@@ -38,7 +38,7 @@ class CountOnMeTests: XCTestCase {
         calculator.addNumber("1")
         XCTAssertNoThrow(try calculator.addOperator("x"))
         calculator.addNumber("3")
-        calculator.calculate()
+        XCTAssertNoThrow(try calculator.calculate())
         XCTAssertEqual(calculator.operationsToReduceTest, ["-2"])
     }
     func testCalculateWhenReplaceComma() {
@@ -52,7 +52,9 @@ class CountOnMeTests: XCTestCase {
         calculator.addNumber("1")
         XCTAssertNoThrow(try calculator.addOperator("x"))
         calculator.addNumber("3")
-        calculator.calculate()
+        XCTAssertNoThrow(try calculator.addOperator("+"))
+        calculator.addNumber("0,0")
+        XCTAssertNoThrow(try calculator.calculate())
         XCTAssert(calculator.operationsToReduceTest == ["0"])
     }
     func testCalculateWhenDivideMultiply() {
@@ -66,8 +68,7 @@ class CountOnMeTests: XCTestCase {
         calculator.addNumber("1")
         XCTAssertNoThrow(try calculator.addOperator("x"))
         calculator.addNumber("3")
-        calculator.calculate()
-        print(calculator.operationsToReduceTest)
+        XCTAssertNoThrow(try calculator.calculate())
         XCTAssertEqual(calculator.operationsToReduceTest, ["0"])
     }
     func testCalculateWhenReduceAddSubstract() {
@@ -83,10 +84,20 @@ class CountOnMeTests: XCTestCase {
         calculator.addNumber("3")
         XCTAssertNoThrow(try calculator.addOperator("+"))
         calculator.addNumber("3")
-        calculator.calculate()
-        print(calculator.operationsToReduceTest)
+        XCTAssertNoThrow(try calculator.calculate())
         XCTAssertEqual(calculator.operationsToReduceTest, ["1,5"])
     }
+    
+    func testCalculateWhenExpressionIsNotlongEnough() {
+        
+        let calculator = Calculator()
+        calculator.resetEquation()
+        calculator.addNumber("1,5")
+        XCTAssertNoThrow(try calculator.addOperator("-"))
+        XCTAssertThrowsError(try calculator.calculate())
+        
+    }
+    
     func testAddNumber() {
         
         let calculator = Calculator()
@@ -275,7 +286,9 @@ class CountOnMeTests: XCTestCase {
         calculator.addNumber("5000")
         XCTAssertNoThrow(try calculator.addComma(","))
         calculator.addNumber("3400000")
+        XCTAssertNoThrow(try calculator.addOperator("x"))
+        calculator.addNumber("0,0")
         let result = calculator.equationToDisplay.trimmingOperations()
-        XCTAssert(result == "500 + 5 - 5 x 5000,34")
+        XCTAssert(result == "500 + 5 - 5 x 5000,34 x 0")
     }
 }

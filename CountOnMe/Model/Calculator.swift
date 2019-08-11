@@ -13,6 +13,7 @@ class Calculator {
     private var equation = ""
     private var operationsToReduce = [String]()
     var hasResult = false
+
     var equationToDisplay: String {
         return equation
     }
