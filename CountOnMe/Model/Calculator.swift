@@ -55,14 +55,14 @@ class Calculator {
             case "x": result = left * right
             default: throw Error.noCorrectOperator
             }
-           // Replace the number before operand by result and erase operand and number after operand
+            // Replace the number before operand by result and erase operand and number after operand
             operationsToReduce[indexOperand-1] = "\(result)"
             operationsToReduce.remove(at: indexOperand)
             operationsToReduce.remove(at: indexOperand)
         }
     }
     
-   private func reduceAddSubstract() throws {
+    private func reduceAddSubstract() throws {
         // Iterate over operations while an operand still here
         while operationsToReduce.count > 1 {
             let left = Float(operationsToReduce[0])!
@@ -80,14 +80,17 @@ class Calculator {
             
         }
     }
-   func calculate() {
+    func calculate() throws {
         // Create local copy of operations
         operationsToReduce = elements
         replaceComma()
+        if operationsToReduce.count > 0 && isOperator(with: operationsToReduce.last!) {
+            throw Error.noCorrectOperator
+        }
         
         do { try reduceDivideMultiply() } catch{ print("Wrong operator")}
         do { try reduceAddSubstract() } catch{ print("Wrong operator")}
-       
+        
         operationsToReduce[0] = operationsToReduce[0].replacingOccurrences(of: ".", with: ",")
         
         equation = operationsToReduce.first!.trimmingOperations()
@@ -109,18 +112,20 @@ class Calculator {
         return true
     }
     func haveEnoughElement() -> Bool {
+        print(elements.count)
         guard elements.count >= 3 else {
             return false
         }
         return true
     }
+    
     func divideIsPossible() -> Bool {
         if elements[elements.count - 1] == "0" && elements[elements.count - 2] == "÷" {
             return false
         }
         return true
     }
-    
+
     // MARK: Errors handling Function
     
     func addNumber(_ number: String) {
@@ -129,6 +134,7 @@ class Calculator {
             hasResult = false
         }
         equation += number
+        print(elements)
         
     }
     func addOperator(_ operatorSign: String) throws {
@@ -143,19 +149,22 @@ class Calculator {
             equation = "-"
         } else if !elements.isEmpty {
             equation += " \(operatorSign) "
+            print(equation)
             equation = equation.trimmingOperations() + " "
+            print(equation)
         }
+        print(elements)
     }
     func addComma(_ operatorSign: String) throws {
         guard canAddComma() else {
             throw Error.cantAddComma
         }
         if elements.last != "+" && elements.last != "-" && elements.last != "x" && elements.last != "÷" {
-        equation += "\(operatorSign)"
+            equation += "\(operatorSign)"
         }
     }
     func checkLastOperation() throws {
-        if !elements.isEmpty {
+        if !elements.isEmpty && elements.count >= 3{
             guard divideIsPossible() else {
                 hasResult = true
                 throw Error.divisionByZero
@@ -167,18 +176,22 @@ class Calculator {
             throw Error.expressionLenghtIncorrect
         }
     }
+    func isOperator(with element:String) -> Bool {
+        return element == "+" || element == "-" || element == "x" || element == "÷"
+    }
 }
 
 // MARK: Errors Enumeration
 
 enum Error: Swift.Error {
     
-    case noCorrectOperator
+    
     case cantAddComma
     case divisionByZero
     case cantAddOperator
-    case canAddFirstOperator
+    case expressionIncorrect
     case expressionLenghtIncorrect
+    case noCorrectOperator
     
 }
 
@@ -197,20 +210,26 @@ extension String {
         allowed.insert(charactersIn: "0")
         if let intValue = Int(value) {
             trimmed = String(intValue)
+            print("Int: \(trimmed)")
         }
-        else {
-            trimmed = value.trimmingCharacters(in: allowed)
-            if trimmed.last == "," {
-                return String(trimmed.replacingOccurrences(of: ",", with: "", options: .literal, range: nil))
-            } else {
-                return trimmed.starts(with: ",") ? "0\(trimmed)" : trimmed
-            }
-        }
+                    else {
+                        trimmed = value.trimmingCharacters(in: allowed)
+                        print(trimmed)
+                        if trimmed == "," {
+                            return "0"
+                        }
+                        if trimmed.last == "," {
+                            return String(trimmed.replacingOccurrences(of: ",", with: "", options: .literal, range: nil))
+            
+                        }else {
+                            return trimmed.starts(with: ",") ? "0\(trimmed)" : trimmed
+                        }
+                    }
+        
         return trimmed
     }
     
 }
-
 extension Float {
     var clean: String {
         return self.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", self) : String(self)
